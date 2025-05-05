@@ -1,0 +1,20 @@
+import re
+import requests
+
+# ১) প্লেলিস্ট ফetch
+url = "https://tv.bdixtv24.com/toffee/live.php?id=9b4b3941986a&e"
+r = requests.get(url, allow_redirects=True)
+r.raise_for_status()
+
+# ২) রিপ্লেস রিলেটিভ লাইন্স
+fixed = re.sub(
+    r'^(?!#)(.+)$',
+    r'https://tv.bdixtv24.com/toffee/\1',
+    r.text,
+    flags=re.MULTILINE
+)
+
+# ৩) ফাইল লিখে রাখুন
+with open("fixed-stream.m3u8", "w") as f:
+    f.write(fixed)
+print("fixed-stream.m3u8 তৈরি হয়ে গেল।")
